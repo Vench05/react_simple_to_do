@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>To Do List</title>
+     <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <!-- mga kailangan paragumana -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        class App extends React.Component {
+
+            constructor(props) {
+                super(props);
+                this.state = {
+                    tasks: [],
+                    input: ""
+                }
+            }
+
+            render() {
+                return(
+                    <div>
+                        <h1> Tasks </h1>
+                        <ul>
+                           {this.state.tasks.map((task, i) => 
+                               <li key={i}>
+                                    {task}
+                                    <button data-index={i} onClick={this.deleteTask}> Delete </button>
+                               </li>
+                           )} 
+                        </ul>
+                        <div>
+                            <input onChange={this.updateInput} value={this.state.input} />
+                            <button onClick={this.addTask}> Add Task </button>
+                            <h2> No. of Task {this.state.tasks.length} </h2>
+                        </div>
+                    </div>
+                );
+            }
+            
+            deleteTask = (event) => {
+                const index = event.target.dataset.index;
+                this.setState(state => {
+                    const tasks = [...state.tasks];
+                    tasks.splice(index, 1);
+                    return {
+                        tasks: tasks
+                    }
+                })
+            }
+
+            addTask = () => {
+                this.setState(state => ({
+                    tasks: [...state.tasks, state.input],
+                    input: ""
+                }))
+            }
+
+            updateInput = (event) => {
+                this.setState({
+                    input: event.target.value
+                })
+            }
+
+        }
+        ReactDOM.render(<App />, document.querySelector('#app'));
+    </script>
+</body>
+</html>
